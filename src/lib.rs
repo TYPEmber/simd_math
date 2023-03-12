@@ -108,7 +108,8 @@ where
     fn ln(self) -> Self {
         let x_less_than_1_mask = self.simd_lt(Self::ONES);
 
-        let inv_self = Self::ONES / self;
+        // let inv_self = Self::ONES / self;
+        let inv_self = self.inv();
         let mut v = x_less_than_1_mask.select(inv_self, self);
 
         let base2_exponent = v
@@ -120,8 +121,6 @@ where
         let divisor = Self::from_bits(v.to_bits().bitand(Self::EXPONENT_MASK));
 
         v /= divisor;
-
-        
 
         // approximate polynomial generated from maple in the post using Remez Algorithm:
         // https://en.wikipedia.org/wiki/Remez_algorithm
